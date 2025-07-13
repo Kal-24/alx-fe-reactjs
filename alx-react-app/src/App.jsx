@@ -1,3 +1,4 @@
+import WelcomeMessage from './components/WelcomeMessage';
 import UserProfile from './components/UserProfile';
 import Header from './components/Header';
 import MainContent from './components/MainContent';
