@@ -6,3 +6,20 @@
 
   }
 }
+{
+  "name": "recipe-sharing-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "zustand": "^4.3.7",
+    "react-router-dom": "^6.23.0"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+
