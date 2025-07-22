@@ -3,46 +3,27 @@ import create from 'zustand';
 const useRecipeStore = create((set, get) => ({
   recipes: [],
   favorites: [],
-  // existing actions like addRecipe, deleteRecipe, updateRecipe...
-
-  searchTerm: '',
-  setSearchTerm: (term) => {
-    set({ searchTerm: term });
-    get().filterRecipes();
-  },
-
-  filteredRecipes: [],
-  filterRecipes: () => {
-    const { recipes, searchTerm } = get();
-    const filtered = recipes.filter(recipe =>
-      recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    set({ filteredRecipes: filtered });
-  },
-
-  // --- TASK 3 additions ---
   recommendations: [],
+  searchTerm: '',
+  filteredRecipes: [],
 
-  addFavorite: (recipeId) =>
-    set(state => ({
-      favorites: state.favorites.includes(recipeId)
-        ? state.favorites
-        : [...state.favorites, recipeId],
-    })),
+  // Task 0: Set all recipes
+  setRecipes: (recipes) => set({ recipes }),
 
-  removeFavorite: (recipeId) =>
-    set(state => ({
-      favorites: state.favorites.filter(id => id !== recipeId),
-    })),
+  // Task 1: Add, update, delete recipes
+  addRecipe: (newRecipe) => set(state => ({
+    recipes: [...state.recipes, newRecipe]
+  })),
 
-  generateRecommendations: () => {
-    const { recipes, favorites } = get();
-    // Simple example: recommend recipes not in favorites
-    const recommended = recipes.filter(
-      recipe => !favorites.includes(recipe.id)
-    );
-    set({ recommendations: recommended });
-  },
-}));
+  updateRecipe: (updatedRecipe) => set(state => ({
+    recipes: state.recipes.map(recipe =>
+      recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+    )
+  })),
 
-export default useRecipeStore;
+  deleteRecipe: (id) => set(state => ({
+    recipes: state.recipes.filter(recipe => recipe.id !== id)
+  })),
+
+  // Task 2: Search/filter recipes
+  setSearchTerm:
