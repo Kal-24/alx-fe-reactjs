@@ -1,20 +1,6 @@
-
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-{
-  "name": "recipe-sharing-app",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^6.14.1",
-    "zustand": "^4.3.7"
-  },
-  "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  }
+"dependencies": {
+  "react": "^18.2.0",
+  "react-dom": "^18.2.0",
+  "zustand": "^4.5.2",
+  "react-router-dom": "^6.22.2"
 }
