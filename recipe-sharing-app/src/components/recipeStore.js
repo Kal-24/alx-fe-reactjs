@@ -1,29 +1,27 @@
 import create from 'zustand';
 
 export const useRecipeStore = create((set) => ({
+  // Recipes data
   recipes: [],
-  favorites: [],
-  recommendations: [],
-
-  addRecipe: (newRecipe) => set((state) => ({
-    recipes: [...state.recipes, newRecipe]
-  })),
-
+  
+  // Task 1
+  addRecipe: (newRecipe) =>
+    set((state) => ({
+      recipes: [...state.recipes, newRecipe]
+    })),
   setRecipes: (recipes) => set({ recipes }),
 
-  addFavorite: (recipeId) => set((state) => ({
-    favorites: [...state.favorites, recipeId]
-  })),
+  // Task 2
+  updateRecipe: (updatedRecipe) =>
+    set((state) => ({
+      recipes: state.recipes.map((recipe) =>
+        recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+      )
+    })),
+  deleteRecipe: (id) =>
+    set((state) => ({
+      recipes: state.recipes.filter((recipe) => recipe.id !== id)
+    })),
 
-  removeFavorite: (recipeId) => set((state) => ({
-    favorites: state.favorites.filter((id) => id !== recipeId)
-  })),
-
-  generateRecommendations: () => set((state) => {
-    const recommended = state.recipes.filter(
-      (recipe) =>
-        state.favorites.includes(recipe.id) && Math.random() > 0.5
-    );
-    return { recommendations: recommended };
-  }),
-}));
+  // Task 3
+  searchTerm
