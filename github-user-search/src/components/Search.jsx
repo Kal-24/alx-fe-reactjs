@@ -1,66 +1,90 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';
+import { searchUsers } from '../services/githubService';
 
-function Search() {
-  const [username, setUsername] = useState('');
-  const [user, setUser] = useState(null);
+const Search = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    location: '',
+    repos: ''
+  });
+
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSearch = async (e) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username) return;
-
     setLoading(true);
-    setError(false);
-    setUser(null);
-
+    setError('');
     try {
-      const data = await fetchUserData(username);
-      setUser(data);
+      const results = await searchUsers(formData);
+      setUsers(results);
     } catch (err) {
-      setError(true);
-    } finally {
-      setLoading(false);
+      setError('Failed to fetch users');
     }
+    setLoading(false);
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <form onSubmit={handleSearch} style={{ marginBottom: '20px' }}>
+    <div className="p-6 max-w-4xl mx-auto">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row md:items-end bg-white p-6 rounded shadow-md">
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter GitHub username"
-          style={{ padding: '10px', width: '250px' }}
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleChange}
+          className="input input-bordered w-full"
         />
-        <button type="submit" style={{ padding: '10px 20px', marginLeft: '10px' }}>
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={formData.location}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+        <input
+          type="number"
+          name="repos"
+          placeholder="Min Repositories"
+          value={formData.repos}
+          onChange={handleChange}
+          className="input input-bordered w-full"
+        />
+        <button type="submit" className="btn btn-primary w-full md:w-auto">
           Search
         </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>Looks like we can't find the user.</p>}
+      {loading && <p className="mt-4 text-blue-500">Loading...</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
 
-      {user && (
-        <div>
-          <img src={user.avatar_url} alt={user.login} width="100" />
-          <h2>{user.name || user.login}</h2>
-          <a href={user.html_url} target="_blank" rel="noreferrer">View Profile</a>
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        {users.map(user => (
+          <div key={user.id} className="border p-4 rounded bg-white shadow">
+            <img src={user.avatar_url} alt={user.login} className="w-16 h-16 rounded-full mb-2" />
+            <h2 className="text-lg font-bold">{user.login}</h2>
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              View Profile
+            </a>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
 
-export default Search;  {loading && <p>Loading...</p>}
-{error && <p>Looks like we cant find the user</p>}
-{user && (
-  <div>
-    <img src={user.avatar_url} alt={user.login} width="100" />
-    <h2>{user.name || user.login}</h2>
-    <a href={user.html_url} target="_blank" rel="noreferrer">View Profile</a>
-  </div>
-)}
-
+export default Search;
