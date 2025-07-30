@@ -1,28 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
+import SearchBar from './components/SearchBar';
+import { fetchGitHubUser } from './services/githubAPI';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleSearch = async (username) => {
+    try {
+      const data = await fetchGitHubUser(username);
+      setUser(data);
+      setError(null);
+    } catch (err) {
+      setUser(null);
+      setError('User not found');
+    }
+  };
+
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>GitHub User Search</h1>
-      <p style={styles.subtitle}>Start building your search feature here.</p>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>GitHub User Search</h1>
+      <SearchBar onSearch={handleSearch} />
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {user && (
+        <div style={{ marginTop: '2rem' }}>
+          <img src={user.avatar_url} alt={user.login} width={100} />
+          <h2>{user.name || user.login}</h2>
+          <p>{user.bio}</p>
+          <a href={user.html_url} target="_blank" rel="noopener noreferrer">View Profile</a>
+        </div>
+      )}
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: '2rem',
-    fontFamily: 'Arial, sans-serif',
-    textAlign: 'center',
-  },
-  title: {
-    fontSize: '2rem',
-    color: '#24292e',
-  },
-  subtitle: {
-    fontSize: '1.2rem',
-    color: '#586069',
-  },
-};
 
 export default App;
