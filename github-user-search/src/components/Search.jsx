@@ -92,5 +92,11 @@ const Search = () => {
     </div>
   );
 };
+{error && (
+  <p className="text-red-500 mt-4">
+    Looks like we can't find the user
+  </p>
+)}
+
 
 export default Search;
