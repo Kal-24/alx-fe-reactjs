@@ -1,3 +1,4 @@
+setError("Looks like we can't find the user");
 import React, { useState } from 'react';
 import { searchUsers } from '../services/githubService';
 
