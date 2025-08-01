@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { searchUsers } from '../services/githubService';
+import { fetchUserData } from '../services/githubService';  // updated import
 
 const Search = () => {
   const [formData, setFormData] = useState({
@@ -24,15 +24,15 @@ const Search = () => {
     setLoading(true);
     setError('');
     try {
-      const results = await searchUsers(formData);
+      const results = await fetchUserData(formData);  // updated usage
       if (results.length === 0) {
-        setError("Looks like we cant find the user"); // No apostrophe here
+        setError("Looks like we cant find the user"); // exact error string as required
         setUsers([]);
       } else {
         setUsers(results);
       }
     } catch (err) {
-      setError("Looks like we cant find the user"); // Same exact string here
+      setError("Looks like we cant find the user");
       setUsers([]);
     }
     setLoading(false);
