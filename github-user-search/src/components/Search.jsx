@@ -1,4 +1,3 @@
-setError("Looks like we can't find the user");
 import React, { useState } from 'react';
 import { searchUsers } from '../services/githubService';
 
@@ -27,13 +26,13 @@ const Search = () => {
     try {
       const results = await searchUsers(formData);
       if (results.length === 0) {
-        setError("Looks like we can't find the user"); // **Exact error message here**
+        setError("Looks like we cant find the user"); // No apostrophe here
         setUsers([]);
       } else {
         setUsers(results);
       }
     } catch (err) {
-      setError("Looks like we can't find the user"); // same exact error for catch as well
+      setError("Looks like we cant find the user"); // Same exact string here
       setUsers([]);
     }
     setLoading(false);
@@ -93,11 +92,5 @@ const Search = () => {
     </div>
   );
 };
-{error && (
-  <p className="text-red-500 mt-4">
-    Looks like we can't find the user
-  </p>
-)}
-
 
 export default Search;
