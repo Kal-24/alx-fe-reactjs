@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const GITHUB_API_URL = 'https://api.github.com/search/users';
 
-export async function searchUsers({ username, location, repos }) {
+export async function fetchUserData({ username, location, repos }) {
   let query = '';
 
   if (username) query += `${username} in:login`;
@@ -23,7 +23,7 @@ export async function searchUsers({ username, location, repos }) {
 
     // Fetch extra details like location and repos count for each user
     // Because the search API doesn't return location/repos count,
-    // we need to fetch each user details individually.
+    // we need to fetch each user's details individually.
 
     const detailedUsers = await Promise.all(users.map(async (user) => {
       const userDetailsResp = await axios.get(user.url);
