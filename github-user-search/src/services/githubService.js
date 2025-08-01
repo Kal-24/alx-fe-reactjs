@@ -1,37 +1,42 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://api.github.com/search/users';
+const GITHUB_API_URL = 'https://api.github.com/search/users';
 
-export const fetchUserData = async (formData, page = 1) => {
-  const { username, location, repos } = formData;
-
-  // Build the query string for GitHub API
+export async function searchUsers({ username, location, repos }) {
   let query = '';
-  if (username) query += `${username} `;
-  if (location) query += `location:${location} `;
-  if (repos) query += `repos:>=${repos} `;
-  query = query.trim();
 
-  const perPage = 30;
-  const url = `${BASE_URL}?q=${encodeURIComponent(query)}&page=${page}&per_page=${perPage}`;
+  if (username) query += `${username} in:login`;
+  if (location) query += ` location:${location}`;
+  if (repos) query += ` repos:>=${repos}`;
 
-  const response = await axios.get(url);
+  if (!query.trim()) return [];
 
-  // Fetch more details for each user (location, repos count)
-  const users = await Promise.all(
-    response.data.items.map(async (user) => {
-      try {
-        const userDetails = await axios.get(user.url);
-        return {
-          ...user,
-          location: userDetails.data.location,
-          public_repos: userDetails.data.public_repos,
-        };
-      } catch {
-        return user;
-      }
-    })
-  );
+  try {
+    const response = await axios.get(GITHUB_API_URL, {
+      params: {
+        q: query,
+        per_page: 30,
+      },
+    });
 
-  return { users, totalCount: response.data.total_count };
-};
+    const users = response.data.items;
+
+    // Fetch extra details like location and repos count for each user
+    // Because the search API doesn't return location/repos count,
+    // we need to fetch each user details individually.
+
+    const detailedUsers = await Promise.all(users.map(async (user) => {
+      const userDetailsResp = await axios.get(user.url);
+      return {
+        ...user,
+        location: userDetailsResp.data.location,
+        public_repos: userDetailsResp.data.public_repos,
+      };
+    }));
+
+    return detailedUsers;
+  } catch (error) {
+    console.error('GitHub API error:', error);
+    throw error;
+  }
+}
