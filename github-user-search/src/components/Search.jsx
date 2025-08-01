@@ -25,9 +25,15 @@ const Search = () => {
     setError('');
     try {
       const results = await searchUsers(formData);
-      setUsers(results);
+      if (results.length === 0) {
+        setError("Looks like we can't find the user"); // **Exact error message here**
+        setUsers([]);
+      } else {
+        setUsers(results);
+      }
     } catch (err) {
-      setError('Failed to fetch users');
+      setError("Looks like we can't find the user"); // same exact error for catch as well
+      setUsers([]);
     }
     setLoading(false);
   };
