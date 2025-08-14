@@ -31,7 +31,7 @@ export default function RecipeDetail() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <Link to="/" className="text-blue-500 hover:underline mb-6 inline-block">
         &larr; Back to Home
       </Link>
@@ -41,13 +41,13 @@ export default function RecipeDetail() {
       <img
         src={recipe.image}
         alt={recipe.title}
-        className="w-full h-64 object-cover rounded-lg mb-6"
+        className="w-full h-64 object-cover rounded-lg mb-6 shadow-md"
         loading="lazy"
       />
 
       <p className="mb-6 text-gray-700">{recipe.summary}</p>
 
-      <section className="mb-8">
+      <section className="mb-8 p-4 bg-gray-50 rounded-md shadow-inner">
         <h2 className="text-2xl font-semibold mb-3">Ingredients</h2>
         <ul className="list-disc list-inside space-y-1 text-gray-700">
           {recipe.ingredients.map((ingredient, idx) => (
@@ -56,7 +56,7 @@ export default function RecipeDetail() {
         </ul>
       </section>
 
-      <section>
+      <section className="p-4 bg-gray-50 rounded-md shadow-inner">
         <h2 className="text-2xl font-semibold mb-3">Instructions</h2>
         <ol className="list-decimal list-inside space-y-2 text-gray-700">
           {recipe.instructions.map((step, idx) => (
