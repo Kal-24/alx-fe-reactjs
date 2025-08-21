@@ -1,3 +1,6 @@
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+
+
 {
   "scripts": {
     "dev": "vite",
@@ -7,4 +10,3 @@
   }
 }
 
-npm install --save-dev jest @testing-library/react @testing-library/jest-dom
