@@ -1,1 +1,1 @@
-npm create vite@latest form-handling-react-new -- --template react
+npm create vite@latest react-router-advanced -- --template react
