@@ -1,1 +1,1 @@
-npm create vite@latest react-router-advanced -- --template react
+npx create-vite react-router-advanced --template react
