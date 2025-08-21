@@ -1,44 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
-const fetchPosts = async () => {
-  const { data } = await axios.get('https://jsonplaceholder.typicode.com/posts');
-  return data;
-};
+function fetchPosts(page) {
+  return axios
+    .get(`https://jsonplaceholder.typicode.com/posts?_limit=10&_page=${page}`)
+    .then(res => res.data);
+}
 
 export default function PostsComponent() {
-  const {
-    data: posts,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isFetching,
-  } = useQuery('posts', fetchPosts, {
-    staleTime: 5 * 60 * 1000, // 5 minutes cache freshness
-    cacheTime: 10 * 60 * 1000, // cache stays for 10 minutes
-    refetchOnWindowFocus: false,
-  });
+  const [page, setPage] = useState(1);
 
-  if (isLoading) return <div>Loading posts...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  const { data, isLoading, error, isFetching } = useQuery(
+    ['posts', page],
+    () => fetchPosts(page),
+    {
+      keepPreviousData: true,  // <--- This keeps showing old posts while new posts load
+    }
+  );
+
+  if (isLoading) return <p>Loading posts...</p>;
+  if (error) return <p>Error loading posts</p>;
 
   return (
     <div>
-      <h2>Posts</h2>
-      <button onClick={() => refetch()} disabled={isFetching}>
-        {isFetching ? 'Refreshing...' : 'Refresh Posts'}
-      </button>
-
+      <h2>Posts - Page {page}</h2>
       <ul>
-        {posts.map((post) => (
-          <li key={post.id} style={{ marginBottom: '1rem' }}>
-            <strong>{post.title}</strong>
-            <p>{post.body}</p>
-          </li>
+        {data.map(post => (
+          <li key={post.id}><strong>{post.title}</strong></li>
         ))}
       </ul>
+
+      <button
+        onClick={() => setPage(old => Math.max(old - 1, 1))}
+        disabled={page === 1}
+      >
+        Previous
+      </button>
+
+      <button
+        onClick={() => setPage(old => old + 1)}
+        disabled={isFetching}
+      >
+        Next
+      </button>
+
+      {isFetching && !isLoading ? <p>Loading new page...</p> : null}
     </div>
   );
 }
