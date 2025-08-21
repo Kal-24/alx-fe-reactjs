@@ -10,12 +10,10 @@ function TodoList() {
   const addTodo = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    const newTodo = {
-      id: Date.now(),
-      text: input.trim(),
-      completed: false,
-    };
-    setTodos([...todos, newTodo]);
+    setTodos([
+      ...todos,
+      { id: Date.now(), text: input.trim(), completed: false },
+    ]);
     setInput("");
   };
 
@@ -37,6 +35,7 @@ function TodoList() {
       <form onSubmit={addTodo}>
         <input
           data-testid="todo-input"
+          type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Add new todo"
@@ -48,17 +47,20 @@ function TodoList() {
         {todos.map(({ id, text, completed }) => (
           <li
             key={id}
-            onClick={() => toggleTodo(id)}
-            style={{ textDecoration: completed ? "line-through" : "none", cursor: "pointer" }}
             data-testid="todo-item"
+            onClick={() => toggleTodo(id)}
+            style={{
+              textDecoration: completed ? "line-through" : "none",
+              cursor: "pointer",
+            }}
           >
             {text}
             <button
+              data-testid="delete-button"
               onClick={(e) => {
                 e.stopPropagation();
                 deleteTodo(id);
               }}
-              data-testid="delete-button"
               style={{ marginLeft: "10px" }}
             >
               Delete
