@@ -1,34 +1,24 @@
 import { useState } from 'react';
 
 export default function RegistrationForm() {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
-
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.username) newErrors.username = 'Username is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log('Submitted data:', formData);
+
+    const newErrors = {};
+    if (!username) newErrors.username = 'Username is required';
+    if (!email) newErrors.email = 'Email is required';
+    if (!password) newErrors.password = 'Password is required';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      const formData = { username, email, password };
+      console.log('Submitted:', formData);
 
       fetch('https://reqres.in/api/users', {
         method: 'POST',
@@ -36,28 +26,44 @@ export default function RegistrationForm() {
         body: JSON.stringify(formData),
       })
         .then((res) => res.json())
-        .then((data) => console.log('API Response:', data));
+        .then((data) => console.log('API response:', data));
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Controlled Registration Form</h2>
+
       <div>
         <label>Username:</label>
-        <input name="username" value={formData.username} onChange={handleChange} />
+        <input
+          type="text"
+          name="username"
+          value={username}            {/* ✅ Required */}
+          onChange={(e) => setUsername(e.target.value)}
+        />
         {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
       </div>
 
       <div>
         <label>Email:</label>
-        <input name="email" value={formData.email} onChange={handleChange} />
+        <input
+          type="email"
+          name="email"
+          value={email}               {/* ✅ Required */}
+          onChange={(e) => setEmail(e.target.value)}
+        />
         {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
       </div>
 
       <div>
         <label>Password:</label>
-        <input name="password" type="password" value={formData.password} onChange={handleChange} />
+        <input
+          type="password"
+          name="password"
+          value={password}           {/* ✅ Required */}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
       </div>
 
