@@ -12,3 +12,13 @@ function App() {
 }
 
 export default App;
+import React from 'react';
+import FormikForm from './components/formikForm';
+
+export default function App() {
+  return (
+    <div style={{ padding: '2rem' }}>
+      <FormikForm />
+    </div>
+  );
+}
