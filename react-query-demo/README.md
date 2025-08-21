@@ -1,2 +1,2 @@
-npm init vite@latest react-router-advanced -- --template react
-
+npm install -g create-vite
+create-vite react-router-advanced --template react
