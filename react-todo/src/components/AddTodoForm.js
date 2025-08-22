@@ -24,17 +24,3 @@ const AddTodoForm = ({ addTodo }) => {
 };
 
 export default AddTodoForm;
-<form onSubmit={handleSubmit}>
-  <input
-    data-testid="todo-input"  // 👈 this is important
-    type="text"
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-  />
-  <button
-    type="submit"
-    data-testid="add-button"  // 👈 this too
-  >
-    Add Todo
-  </button>
-</form>
