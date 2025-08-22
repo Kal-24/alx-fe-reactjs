@@ -34,10 +34,14 @@ const TodoList = () => {
             data-testid={`todo-item-${todo.id}`}
           >
             {todo.text}
-            <button onClick={(e) => {
-              e.stopPropagation();
-              deleteTodo(todo.id);
-            }}>Delete</button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTodo(todo.id);
+              }}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
